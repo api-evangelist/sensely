@@ -1,23 +1,104 @@
 aid: sensely
 name: Sensely
-description: 'Sensely is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Sensely is a San Francisco conversational-AI company whose empathy-driven avatar assistant guides
+  health-plan members and patients through symptom assessment, care navigation, mental-health
+  check-ins, enrollment and onboarding, and chronic-condition management. The platform is licensed to
+  payers, providers, pharmaceutical companies and employers, and is embedded by partners through
+  first-party iOS, Android and Web/JavaScript conversational SDKs backed by an AWS-hosted platform API
+  at apis.sensely.com. Clinical content is licensed from Mayo Clinic and the NHS, and the assistant is
+  deployed across the Sensely app, web, SMS, WhatsApp, Facebook Messenger, WeChat, Line and Telegram.
+  Sensely was acquired by Spanish AI-triage company Mediktor, announced 5 June 2024.
+image: https://assets.sense.ly/images/senselyLogoWhite.png
 url: https://raw.githubusercontent.com/api-evangelist/sensely/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
 - Company
-apis: []
+- Healthcare
+- Digital Health
+- Conversational AI
+- Virtual Assistant
+- Symptom Checker
+- Patient Engagement
+- Health Insurance
+- Mental Health
+- SDK
+apis:
+- aid: sensely-platform-api
+  name: Sensely Platform API
+  description: >-
+    The AWS API Gateway surface behind the Sensely conversational SDKs. Observed public operations
+    cover partner authentication and token refresh, member self-service password reset, program-code
+    verification and avatar audio generation. Sensely publishes no OpenAPI or public API reference;
+    full SDK and API documentation is released only to partners with an executed Partner Agreement,
+    so the operation set recorded here was read from Sensely's own publicly served Web SDK bundle.
+  humanURL: https://github.com/Sensely/SDK-Web
+  baseURL: https://apis.sensely.com
+  tags:
+  - Conversational AI
+  - Healthcare
+  - Authentication
+  properties:
+  - type: Authentication
+    url: authentication/sensely-authentication.yml
+  - type: OAuthScopes
+    url: scopes/sensely-scopes.yml
+  - type: ErrorCatalog
+    url: errors/sensely-problem-types.yml
+  - type: SourceCode
+    url: https://github.com/Sensely/SDK-Web
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/sensely-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/sensely_stock/
+  url: https://sensely.com/
+- type: ParentCompany
+  url: https://www.mediktor.com/
+- type: Solutions
+  url: https://sensely.com/solutions/
+- type: GitHubOrganization
+  url: https://github.com/Sensely
+- type: Blog
+  url: https://sensely.com/news/
+- type: StatusPage
+  url: https://status.sense.ly/
+- type: Login
+  url: https://sensely.com/customer-portal/
+- type: TermsOfService
+  url: https://sensely.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://sensely.com/privacy-policy/
+- type: SDKs
+  url: packages/sensely-packages.yml
+- type: Packages
+  url: packages/sensely-packages.yml
+- type: Components
+  url: components/sensely-components.yml
+- type: LLMsTxt
+  url: llms/sensely-llms.txt
+- type: Conventions
+  url: conventions/sensely-conventions.yml
+- type: Conformance
+  url: conformance/sensely-conformance.yml
+- type: Lifecycle
+  url: lifecycle/sensely-lifecycle.yml
+- type: ChangeLog
+  url: changelog/sensely-changelog.yml
+- type: Plans
+  url: plans/sensely-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/sensely-rate-limits.yml
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 15
+  pass: local-v1

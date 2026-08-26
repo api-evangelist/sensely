@@ -1,0 +1,104 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Live fetch of the Cognito OIDC discovery document
+  (https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/.well-known/openid-configuration,
+  HTTP 200, 2026-08-26); TLS/DNS probes of sensely.com and apis.sensely.com; and a read of
+  https://sensely.com/terms-of-use/ and https://sensely.com/privacy-policy/ for compliance claims.
+note: >-
+  Sensely operates in a regulated market — US health plans and providers under HIPAA, and NHS England
+  through the AskFirst deployment — but publishes no certifications, no trust centre and no
+  compliance page. Its Terms of Use place HIPAA responsibility on the clinician using the service and
+  refer to a Business Associate Agreement whose name is still an unfilled template placeholder
+  ("a [insert name of agreement] with Sensely"). Nothing here is asserted that Sensely does not
+  demonstrably do, and no Compliance pointer is emitted, because no certification is published.
+standards:
+- id: oidc
+  name: OpenID Connect Discovery 1.0
+  conforms: true
+  evidence: >-
+    Sensely's Amazon Cognito user pool serves a valid OIDC discovery document at
+    cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/.well-known/openid-configuration
+    (HTTP 200), advertising issuer, authorization, token, userinfo, revocation, end_session and
+    jwks_uri endpoints with RS256 id token signing.
+  caveat: >-
+    The discovery document is served by AWS on Sensely's behalf, not from a Sensely-controlled host.
+    No /.well-known/openid-configuration exists on sensely.com or apis.sensely.com.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: partial
+  evidence: >-
+    The Cognito pool exposes standard OAuth 2.0 authorization, token and revocation endpoints with
+    response_types code and token. However, the partner-facing platform API at apis.sensely.com does
+    not use OAuth: it takes a username and password in a JSON body at /authenticate/authenticate and
+    returns an opaque token pair, and its public endpoints are gated by a static AWS API Gateway
+    x-api-key.
+- id: rfc9457
+  name: 'RFC 9457 Problem Details for HTTP APIs'
+  conforms: false
+  evidence: >-
+    apis.sensely.com returns the stock AWS API Gateway envelope — content-type application/json with
+    a bare {"message": ...} body and the error type in an x-amzn-errortype header — not
+    application/problem+json. Observed on six paths, 2026-08-26.
+- id: rfc8594
+  name: 'RFC 8594 Sunset HTTP Header'
+  conforms: false
+  evidence: 'No Sunset or Deprecation header observed and no deprecation policy published.'
+- id: idempotency
+  name: Idempotency keys
+  conforms: false
+  evidence: >-
+    No idempotency header is sent by any Sensely SDK or documented anywhere, while the Web SDK
+    automatically retries failed POSTs.
+- id: pagination
+  name: Documented pagination
+  conforms: false
+  evidence: 'No pagination parameters or envelopes observed or documented.'
+- id: tls
+  name: 'TLS 1.2+ with HSTS'
+  conforms: partial
+  evidence: >-
+    TLS 1.3 on both sensely.com and apis.sensely.com. HSTS is set on sensely.com (max-age 31536000)
+    but not on apis.sensely.com, the host that actually carries member credentials.
+- id: hipaa
+  name: 'HIPAA (US Health Insurance Portability and Accountability Act)'
+  conforms: unknown
+  evidence: >-
+    Sensely's Terms of Use reference HIPAA and a Business Associate Agreement, but make no affirmative
+    compliance claim and name no audit or attestation. The BAA is referenced by an unfilled template
+    placeholder. No SOC 2, ISO 27001, HITRUST or NHS DSPT claim appears anywhere on sensely.com.
+  source: https://sensely.com/terms-of-use/
+- id: gdpr
+  name: 'GDPR / UK GDPR'
+  conforms: unknown
+  evidence: >-
+    Sensely maintains a UK-facing privacy centre (https://sensely.com/privacy-centre/, HTTP 200) with
+    an NHS transparency notice, which is consistent with a UK GDPR posture, but publishes no DPA, no
+    sub-processor list and no data-protection contact.
+  source: https://sensely.com/privacy-centre/
+domain_standards:
+- id: fhir
+  name: 'HL7 FHIR'
+  conforms: false
+  evidence: >-
+    Probed for. No FHIR resource types, CapabilityStatement, $metadata surface or FHIR base URL
+    appears in any Sensely public material or in the Web SDK bundle. The platform exposes
+    Sensely-proprietary paths (/proc/assessmentData, /proc/get_symptom_checker_outcome_result/,
+    /proc/patient/current/settings) whose payload shapes are undocumented.
+  note: >-
+    This is the material domain-standard finding for a healthcare provider: Sensely's symptom
+    assessment produces clinical triage output and its conversation service holds a patient record,
+    yet neither is expressed in FHIR, so every payer or provider integration needs a bespoke
+    connector rather than a standard one.
+- id: hl7v2
+  name: 'HL7 v2 messaging'
+  conforms: false
+  evidence: 'No HL7 v2 message types or MLLP surface found.'
+- id: x12
+  name: 'ASC X12 (US healthcare EDI)'
+  conforms: false
+  evidence: 'No X12 transaction sets referenced despite the payer/health-plan customer base.'
+- id: smart-on-fhir
+  name: 'SMART on FHIR'
+  conforms: false
+  evidence: 'No SMART launch, scopes (patient/*.read, launch/patient) or .well-known/smart-configuration found.'

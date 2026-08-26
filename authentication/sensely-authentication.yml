@@ -1,0 +1,73 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Sensely's published Web SDK bundle (https://clinician-web.sense.ly/latest/sensely.umd.js.min,
+  HTTP 200, 2026-08-26), the iOS SDK README at github.com/Sensely/SenselySDK-iOS, and a live fetch of
+  the OIDC discovery document for the Cognito user pool that bundle names
+  (https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/.well-known/openid-configuration,
+  HTTP 200, 2026-08-26).
+api: sensely-platform-api
+note: >-
+  Sensely publishes no OpenAPI and no public authentication reference — the SDK READMEs say full
+  documentation is released only to partners under an executed Partner Agreement. Everything below was
+  observed directly: either in the JavaScript Sensely itself serves to every visitor of its demo, or
+  by fetching the identity provider's own discovery document. No credential value is recorded here.
+schemes:
+- name: partnerCredentials
+  type: http
+  scheme: custom
+  in: body
+  endpoint: 'POST https://apis.sensely.com/authenticate/authenticate'
+  request_fields: [username, password, qa]
+  description: >-
+    Primary partner authentication. The SDK posts a partner username and password and receives a
+    token, a refresh token and an id token. The same username/password pair is passed to the iOS
+    SDK's SenselyWidget.initialize alongside a procedureId.
+  observed_status: '200 (GET to the same path returned HTTP 200, application/json, 740 bytes, 2026-08-26)'
+- name: refreshToken
+  type: http
+  scheme: bearer
+  endpoint: 'POST https://apis.sensely.com/authenticate/refresh'
+  request_fields: [refresh_token, region, qa]
+  description: >-
+    Exchanges a refresh token for a new access token. The SDK sends region (observed value "UK") when
+    operating against a non-default regional deployment.
+- name: apiKey
+  type: apiKey
+  in: header
+  name: x-api-key
+  description: >-
+    AWS API Gateway key required on the unauthenticated /pub/* endpoints (reset-password,
+    verify-program-code). A key value is embedded in the publicly served Web SDK bundle, so it is a
+    publishable client key rather than a secret; the value is deliberately not recorded in this
+    artifact. Any request to apis.sensely.com without it returns HTTP 403 with
+    x-amzn-errortype ForbiddenException.
+- name: cognitoOIDC
+  type: openIdConnect
+  openIdConnectUrl: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/.well-known/openid-configuration
+  description: >-
+    Sensely's member identity is an Amazon Cognito user pool (us-west-1_pMO3JfnoS, region us-west-1).
+    Its OIDC discovery document is publicly readable and was fetched successfully.
+  discovery:
+    issuer: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS
+    authorization_endpoint: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/authorize
+    token_endpoint: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/token
+    userinfo_endpoint: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/userInfo
+    revocation_endpoint: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/revoke
+    end_session_endpoint: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/logout
+    jwks_uri: https://cognito-idp.us-west-1.amazonaws.com/us-west-1_pMO3JfnoS/.well-known/jwks.json
+    response_types_supported: [code, token]
+    id_token_signing_alg_values_supported: [RS256]
+    token_endpoint_auth_methods_supported: [client_secret_basic, client_secret_post]
+    subject_types_supported: [public]
+- name: nhsLogin
+  type: oauth2
+  description: >-
+    For the AskFirst (NHS) deployment the widget federates to NHS login via
+    https://nhslogin.sense.ly/Home/NHSLogin?type=web&redirect_url= (a QA host,
+    nhslogin-qa.sense.ly, is also referenced in the bundle). This is a UK-specific citizen identity
+    path, not a partner credential.
+gaps:
+- 'No public authentication reference page — the SDK READMEs route to a Google Form request-access flow.'
+- 'No /.well-known/openid-configuration or /.well-known/oauth-authorization-server on any Sensely-controlled host.'
+- 'Token lifetime, rotation policy and refresh window are not published.'

@@ -1,0 +1,78 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Git tag history of https://github.com/Sensely/SenselySDK-iOS (tag list + commit dates via the
+  GitHub API, 2026-08-26), the CocoaPods trunk API for SenselySDK, and repository push timestamps for
+  the Android and Web SDK repositories.
+note: >-
+  Sensely publishes no changelog, no release notes and no dated API change log. The repositories carry
+  zero GitHub Releases. The only dated version history available to the public is the SDK tag history
+  reproduced below; none of the tags carries a description, so nothing can be said about what changed
+  or whether any change was breaking. Entries are recorded as version + date only, which is all the
+  evidence supports.
+scheme: semver
+changelog_url: null
+current_version: 3.14.4
+current_version_date: '2024-11-27'
+entry_count: 8
+entries:
+- version: 3.14.4
+  date: '2024-11-27'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+  note: 'Current release. Latest tag on the repository; also the version pinned in Package.swift.'
+- version: 3.14.3
+  date: '2024-10-09'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+- version: 3.14.2
+  date: '2023-12-19'
+  component: iOS SDK
+  breaking: true
+  highlights:
+  - 'Distribution moved from CocoaPods to Swift Package Manager.'
+  note: >-
+    Recorded as breaking on the basis of the repository README, which states "Versions prior 3.14.2
+    are distributed using cocoapods" — a distribution-channel change that requires every consumer to
+    re-integrate. This is the only tag for which the public material says anything about its content.
+- version: '3.13'
+  date: '2022-09-13'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+- version: 3.9.4
+  date: '2021-05-25'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+  note: 'Last version published to CocoaPods trunk (created 2021-05-25).'
+- version: 3.9.3
+  date: '2021-02-12'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+- version: 3.9.2
+  date: '2021-01-30'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+- version: '3.9'
+  date: '2020-12-24'
+  component: iOS SDK
+  breaking: unknown
+  highlights: []
+other_components:
+- component: Android SDK
+  latest_activity: '2024-03-07'
+  versions_published: 0
+  note: 'Single non-semver tag named "SDK"; no dated version history exists.'
+- component: Web SDK
+  latest_activity: '2020-07-28'
+  versions_published: 0
+  note: 'No tags. Distributed from an unpinned /latest/ CDN path, so consumers cannot observe changes at all.'
+gaps:
+- 'No changelog page, no release notes, no GitHub Releases.'
+- 'No API change log distinct from SDK versions.'
+- 'No breaking-change policy or notice period.'

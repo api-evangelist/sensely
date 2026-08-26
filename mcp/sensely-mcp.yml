@@ -1,0 +1,79 @@
+generated: '2026-08-26'
+method: derived
+status: candidate
+source: >-
+  Searched for an official Sensely MCP server across github.com/Sensely (4 public repositories), npm
+  (@sensely/*, sensely-mcp — all 404), PyPI, the Sensely site (21-page sitemap) and the SDK READMEs.
+  None exists. The candidate tools below are derived from endpoints Sensely itself exposes in its
+  publicly served Web SDK bundle, not from an OpenAPI — Sensely publishes none.
+note: >-
+  Sensely ships no MCP server, hosted or local, and no agent-callable surface of any kind. No pointer
+  of type MCPServer is wired into apis.yml, because doing so would assert an agent surface this
+  provider does not have. This file records the absence and sketches what a server would cover if one
+  were built.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+searched:
+- registry: github
+  query: 'github.com/Sensely repositories'
+  result: 'SenselySDK-iOS, SDK-Android, SDK-Web, djinni — no MCP server'
+- registry: npm
+  query: 'sensely, sensely-mcp, @sensely/sdk, senselysdk'
+  result: '404 on all'
+- registry: pypi
+  query: sensely
+  result: 404
+- registry: site
+  query: 'sensely.com sitemap (21 pages)'
+  result: 'No MCP, agent or AI-integration page'
+candidate_tools:
+- name: authenticate_partner
+  description: 'Exchange partner username and password for an access token, refresh token and id token.'
+  rest: 'POST https://apis.sensely.com/authenticate/authenticate'
+  confidence: high
+  note: 'Endpoint observed live (HTTP 200). Request fields username, password, qa read from the SDK bundle.'
+- name: refresh_token
+  description: 'Exchange a refresh token for a new access token, optionally scoped to a region.'
+  rest: 'POST https://apis.sensely.com/authenticate/refresh'
+  confidence: high
+- name: verify_program_code
+  description: 'Validate a member program code before starting a conversation.'
+  rest: 'GET https://apis.sensely.com/pub/verify-program-code?program_code={code}'
+  confidence: high
+  note: 'Requires the x-api-key header; returns 403 without it.'
+- name: reset_password
+  description: 'Initiate a member password reset from a SHA-256 hashed user id.'
+  rest: 'POST https://apis.sensely.com/pub/reset-password'
+  confidence: high
+  note: >-
+    Write operation with no documented reversal — see conventions/sensely-conventions.yml. A real MCP
+    server should gate this behind confirmation.
+- name: get_avatar_audio
+  description: 'Generate avatar speech audio for a given organisation.'
+  rest: 'GET https://apis.sensely.com/cdn/getAvatarAudio?mode=gen.php&orgID={id}'
+  confidence: medium
+- name: list_conversations
+  description: 'List the conversation flows available to the authenticated member.'
+  rest: 'GET /proc/patient/current/conversations (regional conversation service)'
+  confidence: low
+  note: >-
+    Path string observed in the SDK bundle but the host is constructed at runtime
+    (clinician-<region>.sense.ly) and the endpoint is not reachable unauthenticated. Method and
+    schema are unknown.
+- name: get_symptom_checker_outcome
+  description: 'Retrieve the triage outcome of a completed symptom-checker conversation.'
+  rest: 'GET /proc/get_symptom_checker_outcome_result/ (regional conversation service)'
+  confidence: low
+- name: get_assessment_data
+  description: 'Retrieve assessment data for a conversation.'
+  rest: 'GET /proc/assessmentData (regional conversation service)'
+  confidence: low
+blockers:
+- 'No OpenAPI, so no operation carries a real inputSchema — every tool above would need a hand-written schema.'
+- 'No public API reference; SDK documentation is released only under an executed Partner Agreement.'
+- 'Patient-facing healthcare data under HIPAA — an MCP server here needs a considered consent and audit design, not a generated wrapper.'

@@ -1,0 +1,74 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://github.com/Sensely/SDK-Web (README), and Sensely's own live demo page
+  https://clinician-web.sense.ly/latest/ whose page source carries the documented integration
+  pattern verbatim (HTTP 200, fetched 2026-08-26).
+note: >-
+  Sensely's primary agent-visible surface is not an API but an embeddable conversational widget. The
+  Web SDK is a UMD bundle dropped into a host page with a script tag and a single mount div; the
+  avatar, the speech interface and the conversation flow all render client-side. The component API
+  below is read from Sensely's own published demo page, which is the closest thing the company
+  publishes to a public integration reference.
+component_count: 2
+families:
+- name: Sensely Web Widget
+  description: >-
+    Full-screen or inline conversational avatar. Renders the Mayo Clinic symptom assessment and any
+    partner-authored conversation flow, with voice and text input, in a host web page.
+  loader: https://clinician-web.sense.ly/latest/sensely.umd.js.min
+  loader_note: 'Unpinned "latest" path; no versioned URL is published.'
+  global: SenselyWidget
+  mount: '<div id="sensely-widget"></div>'
+  demo: https://clinician-web.sense.ly/latest/
+  methods:
+  - name: SenselyWidget.init
+    signature: 'SenselyWidget.init(config, onReadyCallback) -> Promise'
+    note: 'Documented config key observed: disableVoice (boolean).'
+  - name: SenselyWidget.sayText
+    signature: 'SenselyWidget.sayText(text)'
+    note: Makes the avatar speak the supplied string.
+  - name: SenselyWidget.setVolume
+    signature: 'SenselyWidget.setVolume()'
+  events:
+  - name: onSenselyWidgetResults
+    target: '#sensely-widget'
+    payload: 'event.detail — the conversation result JSON'
+    note: Fired when a conversation completes; carries the assessment outcome.
+  - name: onSenselyWidgetSessionTimeout
+    target: '#sensely-widget'
+    payload: 'event.detail — the timeout message, overridable by the host page'
+  - name: onSenselyWidgetExit
+    target: '#sensely-widget'
+    payload: none
+  query_parameters:
+  - name: disableVoice
+    values: 'true | false'
+  - name: avatarOnly
+    values: 'true | false'
+  - name: sayText
+    note: QA affordance — the avatar speaks the supplied string on load.
+  - name: nhsSignupEnabled
+    values: 'true | false'
+    note: Switches branding to AskFirst (NHS).
+  supported_browsers:
+    desktop: [Google Chrome, Mozilla Firefox]
+    mobile: [iOS Safari, iOS Web Views, Android, WeChat]
+- name: Sensely Drawer
+  description: >-
+    Low-code variant of the same widget, mounted as a slide-out drawer over an existing site rather
+    than taking the full viewport. Presented by Sensely as the drop-in option for partners who do not
+    want to restructure a page.
+  demo: https://clinician-web.sense.ly/nhs/
+  loader: https://clinician-web.sense.ly/latest/sensely.umd.js.min
+  note: >-
+    Sensely also publishes marketing pages for this pattern at https://sensely.com/askfirst-web-widget/
+    and https://sensely.com/drawer-test-page/.
+native_sdks:
+- platform: iOS
+  entrypoint: 'SenselyWidget.initialize(username:password:procedureId:language:conversationData:theme:defaultAudio:controller:delegate:completion:)'
+  delegate: 'SenselyViewControllerDelegate — senselyViewController(_:didReceiveFinalJSON:)'
+  source: https://github.com/Sensely/SenselySDK-iOS
+- platform: Android
+  entrypoint: 'Sample app in /app; credentials entered at runtime to list available conversations'
+  source: https://github.com/Sensely/SDK-Android

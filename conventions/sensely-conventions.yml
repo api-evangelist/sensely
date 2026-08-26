@@ -1,0 +1,122 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Sensely's published Web SDK bundle (https://clinician-web.sense.ly/latest/sensely.umd.js.min,
+  HTTP 200, 2026-08-26), the iOS and Android SDK READMEs on github.com/Sensely, and live
+  unauthenticated probes of https://apis.sensely.com.
+api: sensely-platform-api
+note: >-
+  Sensely publishes no API reference, so no convention here is a documented commitment — each is an
+  observed behaviour of the platform or the SDK, and every one of them could change without notice.
+  That is itself the finding: an agent integrating with Sensely has no contract to rely on.
+auth:
+  style: 'Partner username/password exchanged for a bearer token, plus an AWS API Gateway x-api-key on /pub/* endpoints'
+  detail: authentication/sensely-authentication.yml
+  transport: 'HTTPS only; TLS 1.3 observed on both sensely.com and apis.sensely.com'
+idempotency:
+  supported: false
+  grade: absent
+  header: null
+  detail: >-
+    No idempotency key header is sent by any SDK and none is documented. This matters because the Web
+    SDK explicitly retries a failed POST after showing the user a connection-error box, which makes
+    every write at-least-once with no server-side deduplication available to the caller.
+pagination:
+  style: none-observed
+  detail: >-
+    No pagination parameters or response envelopes were observed on any public endpoint. The
+    conversation-service paths the SDK constructs (/proc/conversations/,
+    /proc/patient/current/conversations) may paginate, but they are not reachable unauthenticated and
+    are not documented.
+field_expansion:
+  supported: unknown
+metadata:
+  supported: true
+  detail: >-
+    The SDK's conversationData helper accepts an arbitrary custom map (custom: {"mykey": "myvalue"})
+    alongside gender, dob and orgId, and those values are carried through the conversation and
+    returned with the result JSON.
+request_id:
+  supported: true
+  headers: [x-amzn-requestid, x-amz-apigw-id, x-amzn-trace-id]
+  detail: >-
+    AWS API Gateway returns a per-request id on every response including errors. It is not documented
+    by Sensely and there is no published support path that asks for it, but it is present and usable
+    for correlation.
+versioning:
+  style: none-published
+  detail: lifecycle/sensely-lifecycle.yml
+error_envelope:
+  style: aws-apigateway
+  detail: errors/sensely-problem-types.yml
+  rfc9457: false
+rate_limit_signaling:
+  headers_observed: []
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was present on any observed response. See
+    rate-limits/sensely-rate-limits.yml.
+regions:
+  supported: true
+  detail: >-
+    The SDK selects a regional deployment at runtime, constructing hosts of the form
+    clinician-<region>.sense.ly (clinician-uk.sense.ly observed) and passing region: "UK" on token
+    refresh. A UK-specific gateway (clinician-uk-gateway.sensely.com) and an NHS login federation
+    host (nhslogin.sense.ly) exist alongside the US default.
+localization:
+  supported: true
+  detail: >-
+    Conversation language is a first-class init parameter (language, default "en"); the iOS README
+    states the Mayo Clinic symptom assessment ships in 8 languages, with more on request. Localization
+    bundles are served from https://assets.sense.ly/localization/.
+realtime:
+  supported: true
+  detail: >-
+    Speech recognition runs over a websocket/socket.io channel — the iOS Swift package pins Starscream
+    4.0.5 and Socket-IO 16.1.1 as binary dependencies, and the Web bundle loads socket.io.min.js
+    against a speech-to-text host (stt.sensely.com, with devstt.sensely.com for development). No
+    AsyncAPI or channel documentation is published for it.
+dry_run_mode:
+  supported: false
+  grade: absent
+  detail: 'No dry-run, preview or validate-only mode is documented or observed on any endpoint.'
+reversibility:
+  grade: undocumented
+  applicable: true
+  applicable_note: >-
+    This is not a read-only API. A completed conversation produces an assessment record that the SDK
+    READMEs say "can also be recorded in Sensely's backend if desired", and the platform exposes
+    member-facing writes (password reset, patient settings). So reversibility applies and is simply
+    not addressed anywhere Sensely publishes.
+  write_surfaces:
+  - operation: 'POST /pub/reset-password'
+    host: apis.sensely.com
+    reversal: none-documented
+    window: null
+    note: >-
+      Initiates a member password reset from a SHA-256 hashed user id. No cancel, revoke or
+      invalidate operation is documented, and no expiry window for the reset is stated.
+  - operation: 'Assessment result persistence (conversation completion)'
+    host: 'regional conversation service (clinician-<region>.sense.ly)'
+    reversal: none-documented
+    window: null
+    note: >-
+      The conversation result JSON is returned to the host app and optionally recorded in Sensely's
+      backend. No delete, void or retract operation for a recorded assessment appears in any public
+      material. For a provider handling patient symptom data under HIPAA and UK NHS deployment this
+      is a consequential gap — an agent or partner app that records an assessment in error has no
+      published way to take it back.
+  - operation: 'PUT/POST /proc/patient/current/settings'
+    host: 'regional conversation service'
+    reversal: none-documented
+    window: null
+    note: 'Path observed in the SDK bundle; method and semantics are not published.'
+  windows_stated: false
+  note: >-
+    No reversal window is asserted here because Sensely states none. Recording an invented window for
+    a healthcare write surface would be worse than recording the gap.
+cross_references:
+  errors: errors/sensely-problem-types.yml
+  lifecycle: lifecycle/sensely-lifecycle.yml
+  authentication: authentication/sensely-authentication.yml
+  rate_limits: rate-limits/sensely-rate-limits.yml
+  scopes: scopes/sensely-scopes.yml

@@ -1,0 +1,62 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Live unauthenticated requests to https://apis.sensely.com/ and several of its paths, 2026-08-26,
+  plus error handling read from Sensely's published Web SDK bundle
+  (https://clinician-web.sense.ly/latest/sensely.umd.js.min).
+api: sensely-platform-api
+format: aws-apigateway
+rfc9457: false
+note: >-
+  Sensely publishes no OpenAPI and no error reference, so there is nothing to derive a catalogue from.
+  What is recorded here is the error envelope actually returned by the platform, observed directly.
+  It is the stock AWS API Gateway shape — a bare {"message": ...} body with the real error type
+  carried in the x-amzn-errortype response header — not RFC 9457 application/problem+json. An
+  integrator gets no error code vocabulary, no remediation text and no documented retry guidance.
+envelope:
+  content_type: application/json
+  body_fields: [message]
+  headers:
+  - name: x-amzn-errortype
+    description: 'Carries the machine-readable error type; the JSON body does not.'
+  - name: x-amzn-requestid
+    description: 'Per-request correlation id returned on every response, including errors.'
+  - name: x-amz-apigw-id
+    description: 'API Gateway request identifier.'
+  - name: x-amzn-trace-id
+    description: 'AWS X-Ray trace identifier, present on some responses.'
+problem_types:
+- code: ForbiddenException
+  status: 403
+  title: Forbidden
+  detail: >-
+    Returned for any request to apis.sensely.com that is missing the required x-api-key header, and
+    also for any path that is not mapped in the API Gateway. Observed 2026-08-26 on /, /openapi.json,
+    /swagger.json, /api-docs, /docs and /pub/verify-program-code.
+  observed: true
+  remediation: >-
+    Send the x-api-key header issued to the partner. Note that this status does not distinguish a
+    missing key from an unmapped path, so a 403 cannot be read as proof that an endpoint exists.
+  evidence: 'HTTP/2 403, content-type application/json, content-length 23, x-amzn-errortype: ForbiddenException'
+- code: Unauthorized
+  status: '!= 200'
+  title: Unable to authenticate
+  detail: >-
+    The Web SDK treats any non-200 response from POST /authenticate/authenticate as an authentication
+    failure and throws a client-side error with the message "Unauthorized". The platform does not
+    appear to distinguish bad credentials from a service failure at this endpoint.
+  observed: false
+  observed_note: 'Read from the SDK bundle error handling; not reproduced against live credentials.'
+client_side_conditions:
+- name: session timeout
+  signal: 'onSenselyWidgetSessionTimeout DOM event on #sensely-widget'
+  detail: 'The widget surfaces a timeout message to the host page; the message text is overridable.'
+- name: connection error
+  signal: 'showConnectionErrorBox() with automatic retry of the failed POST'
+  detail: >-
+    The Web SDK retries the request after displaying a connection-error box to the user. Because the
+    write endpoints are not idempotent and carry no idempotency key, this retry is at-least-once.
+gaps:
+- 'No published error reference, error-code table or status-code contract.'
+- 'Not RFC 9457 — no application/problem+json, no type URI, no instance.'
+- '403 is overloaded across authorization failure and unknown route.'

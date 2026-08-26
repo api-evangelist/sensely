@@ -1,0 +1,33 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Full walk of https://sensely.com/page-sitemap.xml (21 pages, HTTP 200, 2026-08-26) plus the site
+  navigation and the three SDK repository READMEs on github.com/Sensely.
+note: >-
+  Sensely publishes no pricing of any kind. There is no pricing page in the sitemap, no plans or tiers
+  in the navigation, no self-service signup and no free tier. Access is an enterprise motion: the SDK
+  READMEs route to a Google Form "Request access" and the SDK licence states "If you do not have an
+  executed Partner Agreement in place, do not install or use the SDK." The Android README tells
+  developers to "request a demo license to get access." A prospective integrator cannot learn the cost
+  of this API without a sales conversation.
+plan_count: 0
+plans: []
+pricing_url: null
+free_tier: false
+self_service_signup: false
+trial:
+  available: unknown
+  note: 'A "demo license" is referenced in the Android SDK README but no terms, duration or price are stated.'
+access_path:
+  model: contact-sales
+  request_form: https://docs.google.com/forms/d/e/1FAIpQLSd0IG28QiYD-_BChDa0OrV3BgAzFJawFvTy6WZFPhmyUb9PCQ/viewform
+  contact: info@sensely.com
+  contract_required: 'Executed Partner Agreement (per the SDK License Agreement in Package.swift)'
+  customer_portal: https://sensely.com/customer-portal/
+evidence:
+- url: https://sensely.com/page-sitemap.xml
+  status: 200
+  finding: '21 pages, none of them a pricing or plans page.'
+- url: https://github.com/Sensely/SDK-Android
+  status: 200
+  finding: '"you can request a demo license to get access" — no price stated.'

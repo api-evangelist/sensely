@@ -1,0 +1,66 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://sensely.com/sensely-system-status/ and https://status.sense.ly/ (both HTTP 200,
+  2026-08-26); git tag history of github.com/Sensely/SenselySDK-iOS; the CocoaPods trunk API;
+  https://sensely.com/mediktor/; and the GlobeNewswire release of 2024-06-05.
+note: >-
+  Sensely publishes a status page and versions its SDKs with semver, but publishes no API versioning
+  policy, no deprecation policy, no Sunset/Deprecation header commitment and no SLA. The most
+  material lifecycle fact about this provider is corporate rather than technical: Sensely was
+  acquired by Mediktor in June 2024, and its public engineering surface has been broadly static since
+  — the last SDK tag is November 2024, the Android repository has not been pushed since March 2024,
+  and the Web SDK repository has not been pushed since July 2020.
+status_page:
+  url: https://status.sense.ly/
+  landing: https://sensely.com/sensely-system-status/
+  provider: UptimeRobot
+  http_status: 200
+  title: Sensely System Status
+  note: >-
+    Live and reachable, but the page renders "There was an error while fetching the data" in place of
+    its uptime panels and lists no named components, so it reports no per-service health. It records
+    no status updates in the last 7 days.
+versioning:
+  api:
+    scheme: none-published
+    note: >-
+      No version segment appears in any observed apis.sensely.com path (/authenticate/authenticate,
+      /authenticate/refresh, /pub/reset-password, /pub/verify-program-code, /cdn/getAvatarAudio) and
+      no version header is documented. There is no published API versioning policy.
+  sdk:
+    scheme: semver
+    current: 3.14.4
+    released: '2024-11-27'
+    channels:
+    - name: Swift Package Manager
+      current: 3.14.4
+      released: '2024-11-27'
+    - name: CocoaPods
+      current: 3.9.4
+      released: '2021-05-25'
+      note: 'Frozen channel — README states versions from 3.14.2 onward are SPM-only.'
+    - name: Web (CDN)
+      current: null
+      note: 'Served from an unpinned /latest/ path; no version is exposed to consumers.'
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy, no RFC 8594 Sunset or Deprecation header commitment, and no documented
+    notice period. The CocoaPods distribution was superseded without a dated deprecation notice — the
+    only signal is one sentence under "Known issues and limitations" in the iOS README.
+sla:
+  published: false
+  note: 'No public SLA, uptime target or support-response commitment.'
+corporate:
+  parent: Mediktor
+  parent_url: https://www.mediktor.com/
+  event: acquisition
+  announced: '2024-06-05'
+  source: https://sensely.com/mediktor/
+  note: >-
+    Sensely's own site carries the acquisition page. Mayo Clinic, whose symptom-assessment content the
+    SDK licenses, became a shareholder of the combined company as part of the transaction.
+deprecated_operations: []

@@ -1,0 +1,97 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  github.com/Sensely org repositories, the Swift Package Manager manifest at
+  raw.githubusercontent.com/Sensely/SenselySDK-iOS/master/Package.swift, the CocoaPods trunk API for
+  SenselySDK, and the Web SDK loader served from clinician-web.sense.ly. npm, PyPI, Maven Central,
+  NuGet, RubyGems, crates.io and pkg.go.dev were all queried and returned no Sensely package.
+note: >-
+  Sensely ships three first-party conversational SDKs (iOS, Android, Web). None of them is published
+  to a mainstream language registry. The iOS SDK is distributed as a Swift Package whose binary
+  targets are pulled from Sensely's own Nexus repository at nexus.sense.ly; the Android SDK is a
+  source repository with a single "SDK" tag and no Maven coordinates; the Web SDK is a CDN-hosted UMD
+  bundle at an unpinned "latest" path. All three READMEs state that full documentation is released
+  only on request, and the SDK licence requires an executed Partner Agreement.
+package_count: 3
+official_count: 3
+registries_searched:
+- npm
+- PyPI
+- Maven Central
+- NuGet
+- RubyGems
+- crates.io
+- pkg.go.dev
+- CocoaPods
+- Swift Package Manager
+packages:
+- name: SenselySDK
+  language: Swift
+  platform: iOS
+  official: true
+  registry: swift-package-manager
+  url: https://github.com/Sensely/SenselySDK-iOS
+  install: 'Add https://github.com/Sensely/SenselySDK-iOS as a Swift Package dependency, then link SenselySDK'
+  version: 3.14.4
+  published: '2024-11-27'
+  version_source: >-
+    git tag 3.14.4 on Sensely/SenselySDK-iOS (commit date 2024-11-27T12:05:06Z); the same version is
+    pinned in Package.swift as a binaryTarget at
+    https://nexus.sense.ly/repository/sensely-sdk-ios/com/sensely/SDK/3.14.4/SenselySDK.zip
+  license: Sensely SDK License Agreement (proprietary; requires an executed Partner Agreement)
+  note: >-
+    Distributed as a binary XCFramework hosted on Sensely's Nexus at nexus.sense.ly, not on a public
+    package registry. Depends on two further Sensely-hosted binary zips (Starscream 4.0.5,
+    Socket-IO 16.1.1), both checksum-pinned in Package.swift.
+- name: SenselySDK
+  language: Objective-C/Swift
+  platform: iOS
+  official: true
+  registry: cocoapods
+  url: https://cocoapods.org/pods/SenselySDK
+  install: pod 'SenselySDK'
+  version: 3.9.4
+  published: '2021-05-25'
+  version_source: 'https://trunk.cocoapods.org/api/v1/pods/SenselySDK — latest version 3.9.4, created 2021-05-25'
+  note: >-
+    Superseded channel. The repository README states "Versions prior 3.14.2 are distributed using
+    cocoapods" — the CocoaPods trunk has not been updated since 2021-05-25 and is 5 minor versions
+    and roughly three and a half years behind the Swift Package distribution. A consumer who installs
+    by CocoaPods today gets 3.9.4, not 3.14.4.
+- name: Sensely SDK for Android
+  language: Java
+  platform: Android
+  official: true
+  registry: source
+  url: https://github.com/Sensely/SDK-Android
+  install: 'Clone the repository and import the module into Android Studio (File > New > Import Project)'
+  version: null
+  published: null
+  version_source: >-
+    Checked. No Maven Central or Google Maven coordinates exist (search.maven.org returned 0 results
+    for "sensely"), and the repository carries a single non-semver tag named "SDK". The only date
+    available is the last push to master, 2024-03-07.
+  license: Sensely SDK License Agreement (proprietary)
+  note: >-
+    Source-only distribution with no registry artifact and no version identifier, so a consumer
+    cannot pin or diff a release. Last repository push 2024-03-07.
+- name: sensely.umd.js
+  language: JavaScript
+  platform: Web
+  official: true
+  registry: cdn
+  url: https://clinician-web.sense.ly/latest/sensely.umd.js.min
+  install: '<script src="https://clinician-web.sense.ly/latest/sensely.umd.js.min"></script>'
+  version: null
+  published: null
+  version_source: >-
+    Checked. Not on npm (registry.npmjs.org returned 404 for sensely, sensely-sdk, senselysdk and
+    @sensely/sdk) and therefore has no jsDelivr or unpkg metadata endpoint. The CDN path is
+    /latest/ — unpinned — and the bundle carries no version string in its URL, so a consumer cannot
+    determine which build they are loading. Observed 2026-08-26: HTTP 200, 381,213 bytes,
+    application/javascript.
+  license: Sensely SDK License Agreement (proprietary)
+  note: >-
+    Unpinned distribution. The documented integration is a script tag against a floating "latest"
+    path, which means every page load may receive a different build with no changelog and no way to
+    roll back. This is the finding, not a gap in our probe.

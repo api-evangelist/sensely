@@ -1,0 +1,45 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Response headers captured from live unauthenticated requests to https://apis.sensely.com (seven
+  paths, 2026-08-26), plus a search of all public Sensely material for documented limits.
+note: >-
+  Sensely documents no rate limits — there is no API reference to document them in. No rate-limit
+  signalling header of any kind was returned on any observed response, so an agent has neither a
+  documented number nor a runtime signal, and would discover a limit only by being throttled. The one
+  inference available is structural: apis.sensely.com is an AWS API Gateway that requires an
+  x-api-key, and an API Gateway key is normally attached to a usage plan with a rate, burst and quota.
+  That plan is not public and no number is asserted here.
+limit_count: 0
+limits: []
+headers_observed: []
+headers_absent:
+- RateLimit-Limit
+- RateLimit-Remaining
+- RateLimit-Reset
+- X-RateLimit-Limit
+- X-RateLimit-Remaining
+- X-RateLimit-Reset
+- Retry-After
+exhaustion:
+  status_code: unknown
+  documented: false
+  note: >-
+    Not observed. AWS API Gateway returns 429 with x-amzn-errortype LimitExceededException or
+    ThrottlingException when a usage plan is exceeded, but this was not reproduced — deliberately, as
+    provoking a throttle would mean generating load against a live healthcare service.
+inferred:
+- surface: https://apis.sensely.com
+  mechanism: 'AWS API Gateway usage plan keyed on x-api-key'
+  evidence: >-
+    Every response carries x-amz-apigw-id and x-amzn-requestid, and every request without x-api-key
+    returns 403 ForbiddenException — the API Gateway key/usage-plan pattern.
+  limit: null
+  note: 'Structure observed; the plan values are not public and are not guessed here.'
+evidence:
+- url: https://apis.sensely.com/authenticate/authenticate
+  status: 200
+  finding: 'No rate-limit header on a successful response.'
+- url: https://apis.sensely.com/
+  status: 403
+  finding: 'No Retry-After or rate-limit header on an error response.'

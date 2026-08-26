@@ -1,0 +1,85 @@
+generated: '2026-08-26'
+method: probed
+source: 'Direct unauthenticated HTTPS probes, 2026-08-26'
+note: >-
+  Every /.well-known/ path was probed on all five Sensely-controlled hosts and none returned a
+  document. sensely.com and assets.sense.ly answer 404; apis.sensely.com is an AWS API Gateway that
+  answers 403 ForbiddenException to any unmapped path; clinician.sense.ly 301-redirects every path to
+  its execute-api origin; usa.services.sensely.com does not resolve. No WellKnown, SecurityTxt or
+  AgentCard pointer is emitted, because nothing was served. This file records a verified absence.
+hosts:
+- host: sensely.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: apis.sensely.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: clinician.sense.ly
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/openid-configuration
+    status: 301
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/ai-plugin.json
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+- host: assets.sense.ly
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: usa.services.sensely.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 0
+    note: DNS did not resolve
+  - path: /.well-known/openid-configuration
+    status: 0
+    note: DNS did not resolve
+  - path: /.well-known/agent-card.json
+    status: 0
+    note: DNS did not resolve
