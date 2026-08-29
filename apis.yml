@@ -9,6 +9,18 @@ description: >-
   at apis.sensely.com. Clinical content is licensed from Mayo Clinic and the NHS, and the assistant is
   deployed across the Sensely app, web, SMS, WhatsApp, Facebook Messenger, WeChat, Line and Telegram.
   Sensely was acquired by Spanish AI-triage company Mediktor, announced 5 June 2024.
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 image: https://assets.sense.ly/images/senselyLogoWhite.png
 url: https://raw.githubusercontent.com/api-evangelist/sensely/refs/heads/main/apis.yml
 x-type: company
