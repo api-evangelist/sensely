@@ -1,14 +1,13 @@
 aid: sensely
 name: Sensely
-description: >-
-  Sensely is a San Francisco conversational-AI company whose empathy-driven avatar assistant guides
-  health-plan members and patients through symptom assessment, care navigation, mental-health
-  check-ins, enrollment and onboarding, and chronic-condition management. The platform is licensed to
-  payers, providers, pharmaceutical companies and employers, and is embedded by partners through
-  first-party iOS, Android and Web/JavaScript conversational SDKs backed by an AWS-hosted platform API
-  at apis.sensely.com. Clinical content is licensed from Mayo Clinic and the NHS, and the assistant is
-  deployed across the Sensely app, web, SMS, WhatsApp, Facebook Messenger, WeChat, Line and Telegram.
-  Sensely was acquired by Spanish AI-triage company Mediktor, announced 5 June 2024.
+description: Sensely is a San Francisco conversational-AI company whose empathy-driven avatar assistant
+  guides health-plan members and patients through symptom assessment, care navigation, mental-health check-ins,
+  enrollment and onboarding, and chronic-condition management. The platform is licensed to payers, providers,
+  pharmaceutical companies and employers, and is embedded by partners through first-party iOS, Android
+  and Web/JavaScript conversational SDKs backed by an AWS-hosted platform API at apis.sensely.com. Clinical
+  content is licensed from Mayo Clinic and the NHS, and the assistant is deployed across the Sensely app,
+  web, SMS, WhatsApp, Facebook Messenger, WeChat, Line and Telegram. Sensely was acquired by Spanish AI-triage
+  company Mediktor, announced 5 June 2024.
 deliveryModel:
   model: unknown
   open_source: unknown
@@ -55,14 +54,13 @@ tags:
 - Mental Health
 - SDK
 apis:
-- aid: sensely-platform-api
+- aid: sensely:sensely-platform-api
   name: Sensely Platform API
-  description: >-
-    The AWS API Gateway surface behind the Sensely conversational SDKs. Observed public operations
-    cover partner authentication and token refresh, member self-service password reset, program-code
-    verification and avatar audio generation. Sensely publishes no OpenAPI or public API reference;
-    full SDK and API documentation is released only to partners with an executed Partner Agreement,
-    so the operation set recorded here was read from Sensely's own publicly served Web SDK bundle.
+  description: The AWS API Gateway surface behind the Sensely conversational SDKs. Observed public operations
+    cover partner authentication and token refresh, member self-service password reset, program-code verification
+    and avatar audio generation. Sensely publishes no OpenAPI or public API reference; full SDK and API
+    documentation is released only to partners with an executed Partner Agreement, so the operation set
+    recorded here was read from Sensely's own publicly served Web SDK bundle.
   humanURL: https://github.com/Sensely/SDK-Web
   baseURL: https://apis.sensely.com
   tags:
